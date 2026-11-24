@@ -20,13 +20,23 @@ export default function ProfileScreen() {
       Alert.alert("Missing information", "Complete all fields before continuing.");
       return;
     }
+    if (password.length < 6) {
+      Alert.alert("Password too short", "Use at least 6 characters.");
+      return;
+    }
 
     setBusy(true);
     try {
       if (mode === "login") await signIn(email.trim(), password);
-      else await signUp(name.trim(), email.trim(), password);
-      if (mode === "register") {
-        Alert.alert("Check your email", "Confirm your account if email confirmation is enabled.");
+      else {
+        const result = await signUp(name.trim(), email.trim(), password);
+        if (result.needsEmailConfirmation) {
+          Alert.alert(
+            "Check your email",
+            "Your account was created. Confirm the email, then sign in here.",
+            [{ text: "Go to sign in", onPress: () => setMode("login") }]
+          );
+        }
       }
     } catch (error) {
       Alert.alert("Authentication error", error instanceof Error ? error.message : "Please try again.");

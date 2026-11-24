@@ -7,7 +7,8 @@ const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export const isSupabaseConfigured = Boolean(url && anonKey);
 
+const browserClient = url && anonKey ? createClient(url, anonKey) : null;
+
 export function getSupabaseBrowserClient() {
-  if (!url || !anonKey) return null;
-  return createClient(url, anonKey);
+  return browserClient;
 }

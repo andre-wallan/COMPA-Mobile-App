@@ -32,6 +32,10 @@ export default function ProfilePage() {
       setMessage("Supabase credentials are not configured.");
       return;
     }
+    if (password.length < 6) {
+      setMessage("Use a password with at least 6 characters.");
+      return;
+    }
 
     setBusy(true);
     setMessage("");
@@ -43,10 +47,14 @@ export default function ProfilePage() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { data: { full_name: name } },
+          options: {
+            data: { full_name: name },
+            emailRedirectTo: `${window.location.origin}/profile`,
+          },
         });
         if (error) throw error;
-        setMessage("Check your email to confirm your account.");
+        setMessage("Account created. Check your email to confirm your account, then return and sign in.");
+        setMode("login");
       }
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Authentication failed.");

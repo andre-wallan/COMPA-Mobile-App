@@ -8,7 +8,7 @@ type AuthContextValue = {
   session: Session | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (name: string, email: string, password: string) => Promise<void>;
+  signUp: (name: string, email: string, password: string) => Promise<{ needsEmailConfirmation: boolean }>;
   signOut: () => Promise<void>;
 };
 
@@ -43,12 +43,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function signUp(name: string, email: string, password: string) {
     if (!supabase) throw new Error("Add Supabase credentials to enable account creation.");
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { full_name: name } },
     });
     if (error) throw error;
+    return { needsEmailConfirmation: data.session === null };
   }
 
   async function signOut() {
