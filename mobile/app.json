@@ -3,6 +3,7 @@
     "name": "COMPA",
     "slug": "compa-mobile",
     "version": "1.0.0",
+    "scheme": "compa",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

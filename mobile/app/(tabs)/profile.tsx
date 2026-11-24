@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 import { Card } from "../../src/components/Card";
 import { Screen } from "../../src/components/Screen";
@@ -8,12 +8,40 @@ import { useAuth } from "../../src/providers/AuthProvider";
 import { colors } from "../../src/theme";
 
 export default function ProfileScreen() {
-  const { user, signIn, signUp, signOut } = useAuth();
+  const { user, loading, signIn, signUp, resetPassword, signOut } = useAuth();
   const [mode, setMode] = useState<"login" | "register">("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [status, setStatus] = useState("");
+
+  function getAuthErrorMessage(error: unknown) {
+    if (!(error instanceof Error)) return "Please try again.";
+    const message = error.message.toLowerCase();
+    if (message.includes("invalid login credentials")) return "Email or password is incorrect.";
+    if (message.includes("email not confirmed")) return "Confirm your email before signing in.";
+    if (message.includes("user already registered")) return "An account already exists for this email.";
+    if (message.includes("rate limit")) return "Too many attempts. Please wait and try again.";
+    if (message.includes("password")) return "Use a valid password with at least 6 characters.";
+    return error.message;
+  }
+
+  async function requestPasswordReset() {
+    if (!email.trim()) {
+      Alert.alert("Email required", "Enter your email address first.");
+      return;
+    }
+    setBusy(true);
+    setStatus("");
+    try {
+      await resetPassword(email.trim());
+      setStatus("Password reset instructions were sent to your email.");
+    } catch (error) {
+      Alert.alert("Password reset failed", getAuthErrorMessage(error));
+    } finally {
+      setBusy(false);
+    }
 
   async function submit() {
     if (!email.trim() || !password || (mode === "register" && !name.trim())) {
@@ -31,6 +59,10 @@ export default function ProfileScreen() {
       else {
         const result = await signUp(name.trim(), email.trim(), password);
         if (result.needsEmailConfirmation) {
+          setStatus("Account created. Confirm your email, then sign in here.");
+          setName("");
+          setPassword("");
+          setMode("login");
           Alert.alert(
             "Check your email",
             "Your account was created. Confirm the email, then sign in here.",
@@ -39,10 +71,21 @@ export default function ProfileScreen() {
         }
       }
     } catch (error) {
-      Alert.alert("Authentication error", error instanceof Error ? error.message : "Please try again.");
+      Alert.alert("Authentication error", getAuthErrorMessage(error));
     } finally {
       setBusy(false);
     }
+  }
+
+  if (loading) {
+    return (
+      <Screen>
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={styles.loadingText}>Loading your account...</Text>
+        </View>
+      </Screen>
+    );
   }
 
   if (user) {
@@ -55,7 +98,10 @@ export default function ProfileScreen() {
           <Text style={styles.email}>{user.email}</Text>
           <Pressable
             style={[styles.button, styles.signOut]}
-            onPress={() => signOut().catch((error) => Alert.alert("Sign out failed", error.message))}
+            onPress={() => {
+              setStatus("");
+              signOut().catch((error) => Alert.alert("Sign out failed", error.message));
+            }}
           >
             <Text style={styles.signOutText}>Sign out</Text>
           </Pressable>
@@ -68,6 +114,11 @@ export default function ProfileScreen() {
     <Screen>
       <Text style={styles.title}>{mode === "login" ? "Welcome back" : "Create an account"}</Text>
       <Text style={styles.subtitle}>Securely save your progress and study plan.</Text>
+      {status ? (
+        <View style={styles.notice}>
+          <Text style={styles.noticeText}>{status}</Text>
+        </View>
+      ) : null}
       {!isSupabaseConfigured && (
         <View style={styles.notice}>
           <Text style={styles.noticeText}>Demo mode: add Supabase credentials to enable real accounts.</Text>
@@ -103,6 +154,15 @@ export default function ProfileScreen() {
         <Pressable style={[styles.button, busy && styles.disabled]} onPress={submit} disabled={busy}>
           <Text style={styles.buttonText}>{busy ? "Please wait…" : mode === "login" ? "Sign in" : "Create account"}</Text>
         </Pressable>
+        {mode === "login" && (
+          <Pressable
+            style={styles.switchButton}
+            onPress={requestPasswordReset}
+            disabled={busy}
+          >
+            <Text style={styles.switchText}>Forgot your password?</Text>
+          </Pressable>
+        )}
         <Pressable
           style={styles.switchButton}
           onPress={() => setMode(mode === "login" ? "register" : "login")}
@@ -117,6 +177,8 @@ export default function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
+  loading: { flex: 1, alignItems: "center", justifyContent: "center" },
+  loadingText: { color: colors.muted, marginTop: 12, fontWeight: "700" },
   title: { color: colors.text, fontSize: 26, fontWeight: "800" },
   subtitle: { color: colors.muted, marginTop: 6, marginBottom: 18, lineHeight: 21 },
   notice: { backgroundColor: "#FEF3C7", borderRadius: 12, padding: 12, marginBottom: 12 },

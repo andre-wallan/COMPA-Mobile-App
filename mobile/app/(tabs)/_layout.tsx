@@ -16,7 +16,7 @@ export default function TabLayout() {
     <Tabs
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarActiveTintColor: "#1D4ED8",
+        tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: "#64748B",
         tabBarStyle: { height: 68, paddingTop: 6, paddingBottom: 8 },
         tabBarIcon: ({ color, size }) => (
