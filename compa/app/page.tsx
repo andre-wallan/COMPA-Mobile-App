@@ -95,7 +95,7 @@ export default async function Home() {
       <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/95 backdrop-blur">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <a href="#" className="flex items-center gap-2">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-700 text-xl font-bold text-white">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-yellow-400 text-xl font-bold text-yellow-950">
               C
             </div>
             <div>
@@ -117,7 +117,7 @@ export default async function Home() {
 
           <Link
             href="/study"
-            className="rounded-lg bg-blue-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-800"
+            className="rounded-lg bg-yellow-400 px-5 py-3 text-sm font-semibold text-yellow-950 transition hover:bg-yellow-300"
           >
             Start Learning
           </Link>
@@ -146,7 +146,7 @@ export default async function Home() {
             <div className="mt-9 flex flex-wrap gap-4">
               <Link
                 href="/study"
-                className="rounded-xl bg-blue-700 px-7 py-4 font-semibold text-white shadow-lg shadow-blue-200 transition hover:-translate-y-1 hover:bg-blue-800"
+                className="rounded-xl bg-yellow-400 px-7 py-4 font-semibold text-yellow-950 shadow-lg shadow-yellow-200 transition hover:-translate-y-1 hover:bg-yellow-300"
               >
                 Start Learning →
               </Link>
@@ -178,12 +178,12 @@ export default async function Home() {
                 <span className="rounded-xl bg-blue-100 p-3 text-2xl">🎓</span>
               </div>
 
-              <div className="mt-8 rounded-2xl bg-blue-700 p-6 text-white">
-                <p className="text-sm text-blue-100">Today's inspiration</p>
+              <div className="mt-8 rounded-2xl bg-yellow-400 p-6 text-yellow-950">
+                <p className="text-sm text-yellow-800">Today's inspiration</p>
                 <h3 className="mt-2 text-2xl font-bold">
                   Every expert was once a beginner.
                 </h3>
-                <p className="mt-3 text-sm text-blue-100">
+                <p className="mt-3 text-sm text-yellow-800">
                   Keep learning. Keep growing.
                 </p>
               </div>

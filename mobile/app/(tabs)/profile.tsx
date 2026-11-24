@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   noticeText: { color: "#92400E", lineHeight: 19 },
   input: { borderWidth: 1, borderColor: colors.border, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 12, marginBottom: 10, color: colors.text, backgroundColor: "#FFFFFF" },
   button: { backgroundColor: colors.primary, borderRadius: 10, alignItems: "center", paddingVertical: 13, marginTop: 4 },
-  buttonText: { color: "#FFFFFF", fontWeight: "800" },
+  buttonText: { color: "#422006", fontWeight: "800" },
   disabled: { opacity: 0.6 },
   switchButton: { alignItems: "center", marginTop: 16 },
   switchText: { color: colors.primary, fontWeight: "700" },

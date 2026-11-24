@@ -209,7 +209,7 @@ export default function StudyPage() {
                 <button
                   type="button"
                   onClick={handleRestartQuiz}
-                  className="mt-6 rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800"
+                  className="mt-6 rounded-lg bg-yellow-400 px-5 py-3 font-semibold text-yellow-950 hover:bg-yellow-300"
                 >
                   Try again
                 </button>
@@ -233,7 +233,7 @@ export default function StudyPage() {
                     <button
                       type="button"
                       onClick={handleNextQuestion}
-                      className="mt-4 rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800"
+                      className="mt-4 rounded-lg bg-yellow-400 px-5 py-3 font-semibold text-yellow-950 hover:bg-yellow-300"
                     >
                       {questionIndex === questions.length - 1
                         ? "See my score"
@@ -272,7 +272,7 @@ export default function StudyPage() {
               <button
                 type="button"
                 onClick={handleNextCard}
-                className="rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800"
+                className="rounded-lg bg-yellow-400 px-5 py-3 font-semibold text-yellow-950 hover:bg-yellow-300"
               >
                 Next card
               </button>
@@ -300,7 +300,7 @@ export default function StudyPage() {
               />
               <button
                 type="submit"
-                className="rounded-lg bg-blue-700 px-6 py-3 font-semibold text-white hover:bg-blue-800"
+                className="rounded-lg bg-yellow-400 px-6 py-3 font-semibold text-yellow-950 hover:bg-yellow-300"
               >
                 Get a suggestion
               </button>

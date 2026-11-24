@@ -115,7 +115,7 @@ async function LearningLevelContent({
           <p className="mt-3 leading-7 text-blue-100">{path.challenge}</p>
           <Link
             href="/study"
-            className="mt-6 inline-block rounded-lg bg-white px-5 py-3 font-semibold text-blue-800 hover:bg-blue-50"
+            className="mt-6 inline-block rounded-lg bg-yellow-400 px-5 py-3 font-semibold text-yellow-950 hover:bg-yellow-300"
           >
             Practice with COMPA
           </Link>

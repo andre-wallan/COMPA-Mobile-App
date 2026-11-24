@@ -100,6 +100,6 @@ const styles = StyleSheet.create({
   feedbackTitle: { color: colors.text, fontWeight: "800", fontSize: 16, marginBottom: 4 },
   caption: { color: colors.muted, lineHeight: 20 },
   primaryButton: { marginTop: 16, borderRadius: 10, backgroundColor: colors.primary, alignItems: "center", paddingVertical: 13 },
-  primaryText: { color: "#FFFFFF", fontWeight: "800" },
+  primaryText: { color: "#422006", fontWeight: "800" },
   score: { color: colors.primary, fontSize: 48, fontWeight: "900", textAlign: "center" },
 });
