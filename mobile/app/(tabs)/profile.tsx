@@ -41,20 +41,21 @@ export default function ProfileScreen() {
       await resetPassword(normalizedEmail);
       setStatus("Password reset instructions were sent to your email.");
     } catch (error) {
-      Alert.alert("Password reset failed", getAuthErrorMessage(error));
+      setStatus(getAuthErrorMessage(error));
     } finally {
       setBusy(false);
     }
   }
 
   async function submit() {
+    setStatus("");
     const normalizedEmail = email.trim().toLowerCase();
     if (!normalizedEmail || !password || (mode === "register" && !name.trim())) {
-      Alert.alert("Missing information", "Complete all fields before continuing.");
+      setStatus("Complete all fields before continuing.");
       return;
     }
     if (password.length < 6) {
-      Alert.alert("Password too short", "Use at least 6 characters.");
+      setStatus("Use a password with at least 6 characters.");
       return;
     }
 
@@ -82,7 +83,7 @@ export default function ProfileScreen() {
         }
       }
     } catch (error) {
-      Alert.alert("Authentication error", getAuthErrorMessage(error));
+      setStatus(getAuthErrorMessage(error));
     } finally {
       setBusy(false);
     }
@@ -184,7 +185,10 @@ export default function ProfileScreen() {
         )}
         <Pressable
           style={styles.switchButton}
-          onPress={() => setMode(mode === "login" ? "register" : "login")}
+          onPress={() => {
+            setStatus("");
+            setMode(mode === "login" ? "register" : "login");
+          }}
         >
           <Text style={styles.switchText}>
             {mode === "login" ? "New to COMPA? Create an account" : "Already have an account? Sign in"}
