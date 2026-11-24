@@ -1,33 +1,52 @@
 # COMPA Mobile
 
-COMPA is a cross-platform learning app built with Expo and React Native.
+COMPA is a cross-platform student learning app built with Expo, React Native, Expo Router, and Supabase.
 
 ## Features
 
 - Quizzes with immediate feedback
-- Flashcards and study tools
 - Learning paths for different education levels
-- Learning resources
+- A curated digital library
 - Supabase sign-in and account creation
+- Password reset by email
 
-## Development
+## Prerequisites
 
-Requirements:
-
-- Node.js
+- Node.js 20 or newer
 - npm
-- Expo CLI
+- Android Studio and an emulator, or Expo Go
+- A Supabase project
 
-From the repository root:
+## Setup
+
+From the repository root in PowerShell:
 
 ```powershell
 cd mobile
 npm install
-npx expo start
+Copy-Item .env.example .env
 ```
 
-To start only the web build:
+Set `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY` in `mobile\.env`.
+Do not put a Supabase service-role key in this app.
+
+In the Supabase SQL editor, run `mobile\supabase\schema.sql`. Then start the app:
 
 ```powershell
-npx expo start --web
+npm start
+```
+
+Useful start commands:
+
+```powershell
+npm run android
+npm run web
+```
+
+## Validation
+
+```powershell
+npx tsc --noEmit
+npx expo lint
+npx expo-doctor
 ```

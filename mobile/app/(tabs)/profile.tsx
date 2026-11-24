@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { router } from "expo-router";
 
 import { Card } from "../../src/components/Card";
 import { Screen } from "../../src/components/Screen";
@@ -14,6 +15,7 @@ export default function ProfileScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
   const [status, setStatus] = useState("");
 
   function getAuthErrorMessage(error: unknown) {
@@ -28,23 +30,26 @@ export default function ProfileScreen() {
   }
 
   async function requestPasswordReset() {
-    if (!email.trim()) {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail) {
       Alert.alert("Email required", "Enter your email address first.");
       return;
     }
     setBusy(true);
     setStatus("");
     try {
-      await resetPassword(email.trim());
+      await resetPassword(normalizedEmail);
       setStatus("Password reset instructions were sent to your email.");
     } catch (error) {
       Alert.alert("Password reset failed", getAuthErrorMessage(error));
     } finally {
       setBusy(false);
     }
+  }
 
   async function submit() {
-    if (!email.trim() || !password || (mode === "register" && !name.trim())) {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail || !password || (mode === "register" && !name.trim())) {
       Alert.alert("Missing information", "Complete all fields before continuing.");
       return;
     }
@@ -55,9 +60,13 @@ export default function ProfileScreen() {
 
     setBusy(true);
     try {
-      if (mode === "login") await signIn(email.trim(), password);
+      if (mode === "login") {
+        await signIn(normalizedEmail, password);
+        setPassword("");
+        router.replace("/");
+      }
       else {
-        const result = await signUp(name.trim(), email.trim(), password);
+        const result = await signUp(name.trim(), normalizedEmail, password);
         if (result.needsEmailConfirmation) {
           setStatus("Account created. Confirm your email, then sign in here.");
           setName("");
@@ -68,6 +77,8 @@ export default function ProfileScreen() {
             "Your account was created. Confirm the email, then sign in here.",
             [{ text: "Go to sign in", onPress: () => setMode("login") }]
           );
+        } else {
+          router.replace("/");
         }
       }
     } catch (error) {
@@ -97,13 +108,21 @@ export default function ProfileScreen() {
           <Text style={styles.name}>{user.user_metadata?.full_name ?? "COMPA Student"}</Text>
           <Text style={styles.email}>{user.email}</Text>
           <Pressable
-            style={[styles.button, styles.signOut]}
-            onPress={() => {
+            style={[styles.button, styles.signOut, signingOut && styles.disabled]}
+            disabled={signingOut}
+            onPress={async () => {
               setStatus("");
-              signOut().catch((error) => Alert.alert("Sign out failed", error.message));
+              setSigningOut(true);
+              try {
+                await signOut();
+              } catch (error) {
+                Alert.alert("Sign out failed", getAuthErrorMessage(error));
+              } finally {
+                setSigningOut(false);
+              }
             }}
           >
-            <Text style={styles.signOutText}>Sign out</Text>
+            <Text style={styles.signOutText}>{signingOut ? "Signing out..." : "Sign out"}</Text>
           </Pressable>
         </Card>
       </Screen>

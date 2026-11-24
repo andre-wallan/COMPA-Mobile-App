@@ -18,10 +18,13 @@ Requires Node.js 20+ and Android Studio with an emulator, or Expo Go on an Andro
 cd 'C:\Users\USER\COMPA Mobile App\COMPA-Mobile-App\mobile'
 npm install
 Copy-Item .env.example .env
-npm start
 ```
 
 Add the Supabase project URL and anon key to `.env`, then open the Supabase SQL editor and run `supabase\schema.sql`.
+
+```powershell
+npm start
+```
 
 ## Run on Android
 

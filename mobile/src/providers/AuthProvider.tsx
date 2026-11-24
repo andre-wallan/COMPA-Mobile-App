@@ -18,38 +18,68 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(isSupabaseConfigured);
 
   useEffect(() => {
     if (!isSupabaseConfigured || !supabase) {
-      setLoading(false);
       return;
     }
 
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setLoading(false);
-    });
+    let active = true;
+
+    supabase.auth.getSession()
+      .then(({ data }) => {
+        if (active) setSession(data.session);
+      })
+      .catch(() => {
+        if (active) setSession(null);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
 
     const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      setSession(nextSession);
+      if (active) setSession(nextSession);
     });
 
     async function handleAuthUrl(url: string) {
-      if (url.includes("code=") || url.includes("access_token=")) {
-        await supabase?.auth.exchangeCodeForSession(url);
+      if (!supabase) return;
+      const parsed = new URL(url);
+      const code = parsed.searchParams.get("code");
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        if (error) throw error;
+        return;
+      }
+
+      const hashParams = new URLSearchParams(parsed.hash.replace(/^#/, ""));
+      const accessToken = hashParams.get("access_token");
+      const refreshToken = hashParams.get("refresh_token");
+      if (accessToken && refreshToken) {
+        const { error } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        });
+        if (error) throw error;
       }
     }
 
     const subscription = Linking.addEventListener("url", (event) => {
-      void handleAuthUrl(event.url);
+      void handleAuthUrl(event.url).catch((error) => {
+        console.warn("Unable to complete authentication redirect:", error);
+      });
     });
 
     void Linking.getInitialURL().then((url) => {
-      if (url) void handleAuthUrl(url);
+      if (url) {
+        void handleAuthUrl(url).catch((error) => {
+          console.warn("Unable to complete authentication redirect:", error);
+        });
+      }
     });
 
     return () => {
+      active = false;
       data.subscription.unsubscribe();
       subscription.remove();
     };

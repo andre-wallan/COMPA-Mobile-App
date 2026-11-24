@@ -40,10 +40,13 @@ create table if not exists public.study_tasks (
 );
 
 alter table public.profiles enable row level security;
+alter table public.subjects enable row level security;
 alter table public.quiz_attempts enable row level security;
 alter table public.bookmarks enable row level security;
 alter table public.study_tasks enable row level security;
 
+create policy "Subjects are publicly readable" on public.subjects
+  for select using (true);
 create policy "Users manage their profile" on public.profiles
   for all using (auth.uid() = id) with check (auth.uid() = id);
 create policy "Users manage their quiz attempts" on public.quiz_attempts
