@@ -1,5 +1,5 @@
 
-import { useLocalSearchParams, Stack } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 
 import { Screen } from "../../../src/components/Screen";
@@ -33,8 +33,6 @@ export default function LearningLevelScreen() {
 
   return (
     <Screen>
-      <Stack.Screen options={{ title: selectedLevel.name }} />
-
       <Text style={styles.title}>{selectedLevel.name}</Text>
       <Text style={styles.description}>{selectedLevel.focus}</Text>
 

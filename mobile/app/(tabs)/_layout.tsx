@@ -33,6 +33,10 @@ export default function TabLayout() {
       <Tabs.Screen name="quiz" options={{ title: "Quiz" }} />
       <Tabs.Screen name="library" options={{ title: "Library" }} />
       <Tabs.Screen name="profile" options={{ title: "Profile" }} />
+      <Tabs.Screen
+        name="level"
+        options={{ title: "Levels", tabBarButton: () => null }}
+      />
     </Tabs>
   );
 }

@@ -1,6 +1,6 @@
 
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { Link } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { Card } from "../../src/components/Card";
@@ -18,42 +18,44 @@ export default function LearnScreen() {
 
       <View style={styles.list}>
         {educationLevels.map((level) => (
-          <Pressable
+          <Link
             key={level.id}
-            onPress={() =>
-              router.push({
-                pathname: "/(tabs)/level/[level]",
-                params: { level: level.id },
-              })
-            }
-            style={({ pressed }) => [
-              styles.pressable,
-              pressed && styles.pressed,
-            ]}
+            href={{
+              pathname: "/(tabs)/level/[level]",
+              params: { level: level.id },
+            }}
+            asChild
           >
-            <Card>
-              <View style={styles.row}>
-                <View style={styles.icon}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.pressable,
+                pressed && styles.pressed,
+              ]}
+            >
+              <Card>
+                <View style={styles.row}>
+                  <View style={styles.icon}>
+                    <Ionicons
+                      name={level.icon as never}
+                      size={26}
+                      color={colors.primary}
+                    />
+                  </View>
+
+                  <View style={styles.details}>
+                    <Text style={styles.cardTitle}>{level.name}</Text>
+                    <Text style={styles.cardCaption}>{level.focus}</Text>
+                  </View>
+
                   <Ionicons
-                    name={level.icon as never}
-                    size={26}
-                    color={colors.primary}
+                    name="chevron-forward"
+                    size={20}
+                    color={colors.muted}
                   />
                 </View>
-
-                <View style={styles.details}>
-                  <Text style={styles.cardTitle}>{level.name}</Text>
-                  <Text style={styles.cardCaption}>{level.focus}</Text>
-                </View>
-
-                <Ionicons
-                  name="chevron-forward"
-                  size={20}
-                  color={colors.muted}
-                />
-              </View>
-            </Card>
-          </Pressable>
+              </Card>
+            </Pressable>
+          </Link>
         ))}
       </View>
     </Screen>
