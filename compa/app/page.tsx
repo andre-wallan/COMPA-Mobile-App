@@ -113,6 +113,7 @@ export default async function Home() {
             <a href="#features" className="hover:text-blue-700">Features</a>
             <a href="#levels" className="hover:text-blue-700">Students</a>
             <a href="#about" className="hover:text-blue-700">About</a>
+            <Link href="/profile" className="hover:text-blue-700">Profile</Link>
           </div>
 
           <Link
@@ -179,7 +180,7 @@ export default async function Home() {
               </div>
 
               <div className="mt-8 rounded-2xl bg-yellow-400 p-6 text-yellow-950">
-                <p className="text-sm text-yellow-800">Today's inspiration</p>
+                <p className="text-sm text-yellow-800">Today&apos;s inspiration</p>
                 <h3 className="mt-2 text-2xl font-bold">
                   Every expert was once a beginner.
                 </h3>
