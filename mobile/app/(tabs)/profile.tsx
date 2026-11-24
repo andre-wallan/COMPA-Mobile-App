@@ -32,7 +32,7 @@ export default function ProfileScreen() {
   async function requestPasswordReset() {
     const normalizedEmail = email.trim().toLowerCase();
     if (!normalizedEmail) {
-      Alert.alert("Email required", "Enter your email address first.");
+      setStatus("Enter your email address first.");
       return;
     }
     setBusy(true);
