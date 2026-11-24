@@ -1,3 +1,4 @@
+
 import type { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -9,10 +10,10 @@ export function Card({ children }: { children: ReactNode }) {
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 16,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
     padding: 16,
+    borderRadius: 12,
   },
 });

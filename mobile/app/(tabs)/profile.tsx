@@ -62,9 +62,11 @@ export default function ProfileScreen() {
     setBusy(true);
     try {
       if (mode === "login") {
-        await signIn(normalizedEmail, password);
-        setPassword("");
-        router.replace("/");
+  await signIn(normalizedEmail, password);
+  setPassword("");
+  setStatus("Login successful. Opening Home...");
+  router.replace("/(tabs)");
+;
       }
       else {
         const result = await signUp(name.trim(), normalizedEmail, password);
